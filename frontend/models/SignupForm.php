@@ -2,7 +2,7 @@
 namespace frontend\models;
 
 use yii\base\Model;
-use common\models\User;
+use frontend\models\User;
 
 /**
  * Signup form
@@ -10,7 +10,7 @@ use common\models\User;
 class SignupForm extends Model
 {
     public $username;
-    public $email;
+    public $mobile;
     public $password;
 
 
@@ -22,19 +22,31 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['mobile', 'trim'],
+            ['mobile', 'required'],
+            ['mobile', 'number'],
+            ['mobile','validatePhone'],
+            ['mobile', 'unique', 'targetClass' => '\frontend\models\User', 'message' => 'This mobile has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
         ];
     }
+
+    public function validatePhone($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $len=strlen($this->mobile);
+            $pattern="/0?(13|14|15|18)[0-9]{9}/";
+            $result=preg_match($pattern,$this->mobile);
+            if ($len!=11||!$result) {
+                $this->addError($attribute, '手机格式错误.');
+            }
+        }
+    }
+
 
     /**
      * Signs user up.
@@ -49,7 +61,7 @@ class SignupForm extends Model
         
         $user = new User();
         $user->username = $this->username;
-        $user->email = $this->email;
+        $user->mobile = $this->mobile;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         
