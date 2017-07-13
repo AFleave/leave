@@ -1,0 +1,57 @@
+#header{
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 2.3rem;
+  background-color: #27AE60;
+  z-index: 10;
+  color: #fff;
+  font-size: 16px;
+  line-height: 2.3rem;
+}
+#header .icon-return{
+  font-size: 40px;
+  float: left;
+  line-height: 2.3rem;
+}
+#header .title{
+  margin-left: 40px;
+  text-align: center;  
+  line-height: 2.3rem;
+  margin-right: 40px;
+}
+#header .right{
+  float: right;
+  font-size: 14px;
+  margin-right: 20px;
+  line-height: 2.3rem;
+}
+#contect{
+  margin-top:2.3rem; 
+
+  background-color: #f6f6f6;
+}
+/*#contect .mintitle{
+  font-size: 12px;
+  color: #ccc;
+}*/
+#contect .toux{
+  border-radius:50%;
+    width: 45px;
+    height: 45px;
+  margin-top: 6px;
+}
+#contect .weui-label {
+    display: block;
+    width:70px;
+}
+.weui-btn_primary {
+    background-color: #27AE60;
+    margin: 50px 7% 0 7%;
+    height: 40px;
+    font-size: 16px;
+    line-height: 40px;
+}
+.weui-cells{
+  margin-top:9px;
+}
