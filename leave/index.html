@@ -12,60 +12,83 @@
     <link rel="stylesheet" href="css/weui.min.css">
     <link href="css/demos.css" rel="stylesheet">
     <link rel="stylesheet" href="css/icon.css">
+    <script>
+    window.onload = function() {
+        var oText = document.getElementById('oText')
+        var unf = document.getElementById('oSpan')
+        oText.oninput = function() {
+            unf.innerHTML = oText.value.length
+        }
+
+    }
+    </script>
     </meta>
 </head>
 
 <body>
     <header id="header">请假单</header>
-    <div class="weui-cells weui-cells_form">
-        <div class="weui-cell weui-cell_access">
-            <div class="weui-cell__hd">
-                <label for="" class="weui-label">假别</label>
-            </div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" id="job" type="text" value="">
-            </div>
-            <div class="weui-cell__ft"></div>
-        </div> 
-        <div class="weui-cell">
-            <div class="weui-cell__hd">
-                <label for="" class="weui-label">开始时间</label>
-            </div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" id="datetime-picker-start" value="">
+    <div id="contect">
+        <p class="mintitle">请假类型</p>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <label for="" class="weui-label">假别：</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="job" type="text" value="">
+                </div>
+                <div class="weui-cell__ft"></div>
             </div>
         </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd">
-                <label for="" class="weui-label">结束时间</label>
-            </div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" id="datetime-picker-end" value="">
-            </div>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd">
-                <label for="" class="weui-label">时长</label>
-            </div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" value="">
+        <p class="mintitle repra">请假时间</p>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <label for="" class="weui-label">开始时间：</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" id="datetime-picker-start" value="">
+                </div>
+                <div class="weui-cell__ft"></div>
             </div>
         </div>
-        <div class="weui-cells__title">请假事由</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <label for="" class="weui-label">结束时间：</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" id="datetime-picker-end" value="">
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <label for="" class="weui-label">时长：</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" value="">
+                </div>
+                <div class="weui-cell__ft"></div>
+            </div>
+        </div>
+        <p class="mintitle repra">请假理由</p>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="请输入请假事由" rows="3"></textarea>
-                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                    <textarea id="oText" class="weui-textarea" placeholder="请输入请假事由" rows="3" maxlength="100" style="font-size: 12px;"></textarea>
+                    <div class="weui-textarea-counter" style="font-size: 12px;"><span id="oSpan" class="textarea-num">0</span>/100</div>
                 </div>
             </div>
         </div>
         <div class="demos-content-padded" style="margin-top: 25px;">
-            <a href="javascript:;" class="weui-btn weui-btn_primary">发送</a><!-- 
+            <a href="javascript:;" class="weui-btn weui-btn_primary">发送</a>
+            <!-- 
             <a href="javascript:;" class="weui-btn weui-btn_default">取消</a> -->
         </div>
     </div>
-    
     <div class="weui-footer weui-footer_fixed-bottom">
         <ul>
             <li><a href="message.html"><span class="icon-wink"></span><div class="conduct" class="active">消息</div></a></li>
@@ -83,19 +106,15 @@ $(function() {
 </script>
 <script src="js/jquery-weui.js"></script>
 <script>
-
 $("#datetime-picker-start").datetimePicker({
     title: '出发时间',
     min: "1990-12-12",
     max: "2022-12-12 12:12",
-    onChange: function (picker, values, displayValues) {
-      console.log(values);
+    onChange: function(picker, values, displayValues) {
+        console.log(values);
     }
 });
 $("#datetime-picker-end").datetimePicker();
-
-
-
 
 $("#job").select({
     title: "选择假别",
