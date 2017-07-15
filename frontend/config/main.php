@@ -16,7 +16,7 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'frontend\models\user',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
@@ -46,4 +46,8 @@ return [
         */
     ],
     'params' => $params,
+    // 配置语言
+    'language'=>'zh-CN',
+    // 配置时区
+    'timeZone'=>'Asia/Chongqing',
 ];

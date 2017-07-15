@@ -3,17 +3,17 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
-
+use frontend\models\User;
 /**
  * Login form
  */
 class LoginForm extends Model
 {
-    public $username;
+    public $mobile;
     public $password;
     public $rememberMe = true;
 
-    private $_user;
+    private $_mobile;
 
 
     /**
@@ -23,7 +23,7 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
+            [['mobile', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
@@ -41,8 +41,8 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
+            $mobile = $this->getMobile();
+            if (!$mobile || !$mobile->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
@@ -56,7 +56,7 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+            return Yii::$app->user->login($this->getMobile(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;
         }
@@ -67,12 +67,12 @@ class LoginForm extends Model
      *
      * @return User|null
      */
-    protected function getUser()
+    protected function getMobile()
     {
-        if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+        if ($this->_mobile === null) {
+            $this->_mobile = User::findByMobile($this->mobile);
         }
 
-        return $this->_user;
+        return $this->_mobile;
     }
 }
