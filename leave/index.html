@@ -14,15 +14,22 @@
     <link rel="stylesheet" href="css/icon.css">
     <script>
     window.onload = function() {
-        var oText = document.getElementById('oText')
-        var unf = document.getElementById('oSpan')
+        var oText = document.getElementById('oText');
+        var unf = document.getElementById('oSpan');
         oText.oninput = function() {
             unf.innerHTML = oText.value.length
         }
-
+        var proname = document.getElementsByClassName('proname')[0];
+        var div2 = document.getElementById('div2');
+        var btn = document.getElementById('btn');
+        proname.onclick = function() {
+            div2.style.top = "0";
+        }
+        btn.onclick = function() {
+            div2.style.top = "100%";
+        }
     }
     </script>
-    </meta>
 </head>
 
 <body>
@@ -83,10 +90,51 @@
                 </div>
             </div>
         </div>
+        <p class="mintitle repra">审批人</p>
+        <div class="weui-cells weui-cells_form">
+            <div class="prove">
+                <img src="images/number1.png" alt="" class="proname">
+                <button class="prowork">添加审批人</button>
+            </div>
+            <img src="images/point.png" alt="" class="point">
+            <div class="prove">
+                <img src="images/number1.png" alt="" class="proname">
+                <button class="prowork">添加审批人</button>
+            </div>
+            <img src="images/point.png" alt="" class="point">
+        </div>
         <div class="demos-content-padded" style="margin-top: 25px;">
             <a href="javascript:;" class="weui-btn weui-btn_primary">发送</a>
             <!-- 
             <a href="javascript:;" class="weui-btn weui-btn_default">取消</a> -->
+        </div>
+        <div id="div2">
+            <div class="div2header">
+                <span class="icon-return" id="btn"></span>
+                <div id="navtop">选择审批人</div>
+            </div>
+            <div id="search">
+                <input type="text" class="search" placeholder="搜索">
+                <img src="images/search.png" class="large" alt="">
+            </div>
+            <div id="div2content">
+                <!-- <div class="A">
+                    <span>c</span>
+                    <input type="text" value="财务部-总监-阿昌" class="div2result">
+                    <input type="text" value="财务部-副总监-阿昌" class="div2result">
+                    <input type="text" value="财务部-会计-阿昌" class="div2result">
+                    <input type="text" value="财务部-记账-阿昌" class="div2result">
+                </div>
+                <div class="A">R</div>
+                <input type="text" value="人力资源部-总监-阿昌" class="div2result">
+                <input type="text" value="人力资源部-副总监-阿昌" class="div2result">
+                <input type="text" value="人力资源部-经理-阿昌" class="div2result">
+                <div class="A">X</div>
+                <input type="text" value="销售部-总监-阿昌" class="div2result">
+                <input type="text" value="销售部-副总监-阿昌" class="div2result">
+                <input type="text" value="销售部-业务员-阿昌" class="div2result">
+                <input type="text" value="销售部-业务员-阿昌" class="div2result"> -->
+            </div>
         </div>
     </div>
     <div class="weui-footer weui-footer_fixed-bottom">
@@ -105,7 +153,50 @@ $(function() {
 });
 </script>
 <script src="js/jquery-weui.js"></script>
+<script src="js/mock-min.js"></script>
 <script>
+var data = Mock.mock('/api/user', {
+
+    'tells|4-6': [{
+        'department': '设计部',
+        'userList|6-10': [{
+            'user_id|+1': 1,
+            'user_name': '@cname',
+            'depart_name': '设计部',
+            'job_name': '职位'
+        }]
+    }]
+});
+
+$.get("/api/user", function(data) {
+    console.log(data);
+    var tells = $.parseJSON(data).tells;
+    console.log(tells);
+    var html = '';
+    $.each(tells, function(index, value) {
+        //console.log(value.department);
+        html += '<div class="list">';
+        html += '<span class="department">' + value.department + '</span>';
+        $.each(value.userList, function(i, v) {
+            //console.log(v.user_name);
+            html += '<div class="div2result">' + v.depart_name + '-' + v.job_name + '-' + v.user_name + '</div>';
+        });
+        html += '</div>';
+    });
+    //console.log(html);
+    $('#div2content').append(html);
+
+});
+
+// $.ajax({
+//     url:'/api/user',
+//     data:{},
+//     type:'get'
+// });
+
+// $('<pre>').text(JSON.stringify(data, null, 4)).appendTo('body');
+
+
 $("#datetime-picker-start").datetimePicker({
     title: '出发时间',
     min: "1990-12-12",
