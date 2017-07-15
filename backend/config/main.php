@@ -15,11 +15,24 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            //接受json 输入
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]            
         ],
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=aleave',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],        
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'enableSession' => false,   //不通过session来验证，因api无状态
+            'loginUrl' => null, //显示一个HTTP 403 错误而不是跳转到登录界面            
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -37,14 +50,39 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => true,  //用rest，美化路由必需开启
+            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',  
+                    'controller' => ['user','book'],
+                    // 'pluralize' => false,   //默认自动加s，false则不加
+                    //登录注册跳转
+                    'extraPatterns' => [
+                        'POST login' => 'login',
+                        'GET signup-test' => 'signup-test',
+                        //测试
+                        'POST create' => 'create',
+                        'POST add' => 'add',
+                        'POST tests' => 'test', 
+                        'GET view' => 'view',
+                        'GET search/<id:\d+>' => 'search',  //一个参数，参数名为id,且参数必需为数字（限制）
+                        'GET a/<p1>/<p2>' => 'a'    //二个参数，参数名分别为p1，p2，参数无限制
+                    ]                 
+                ], // rest方式
+                'GET user/test' => 'user/test',
+                // 'POST user/index/<name>' => 'user/index',
+
+                // 'login' => 'site/login', //普通方式：指定 路由为/web/login 即跳转到site/login
+                
+                // 'books' => 'book/options',
+                // 'books/<id>' => 'book/options',                
             ],
         ],
-        */
+        
     ],
     'params' => $params,
 ];
