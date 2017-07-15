@@ -94,13 +94,26 @@ body, html {
     height: 17px;
     margin-top: 9%;
 }
-#navtop{
+.div2header{
+  top: 0px;
   width: 100%;
-  height: 40px;
+  height: 2.3rem;
   background-color: #27AE60;
-  text-align: center;
-  line-height: 40px;
+  z-index: 10;
   color: #fff;
+  font-size: 16px;
+  line-height: 2.3rem;
+}
+.div2header .icon-return{
+  font-size: 40px;
+  float: left;
+  line-height: 2.3rem;
+}
+#navtop{
+  margin-left: 40px;
+  text-align: center;  
+  line-height: 2.3rem;
+  margin-right: 40px;
 }
 #div2{
   width: 100%;
@@ -112,16 +125,14 @@ body, html {
   z-index: 99;
   transition: all 0.5s;
 }
-#div2 .top{
+#search{
   width: 100%;
   height: 37px;
   background-color: #ccc;
 }
-#search{
-  display: inline;
-}
-#div2 .top .search {
-   width: 75%;
+#div2 .search {
+    width:85%;
+  height: 37px;
     height: 20px;
     border-radius: 36px;
     vertical-align: top;
@@ -132,35 +143,34 @@ body, html {
     padding-left: 30px;
     font-size: 12px;
 }
-#div2 .top .large {
+#div2 .large {
     width: 24px;
     height: 24px;
-    margin-left: -264px;
+    margin-left: -302px;
     margin-top: 7px;
-}
-#btn {
-    width: 17px;
-    height: 17px;
-    margin-left: 253px;
-    margin-top: 4px;
-    padding-bottom: 4px;
 }
 #div2content{
   width: 100%;
   height: 100%;
   background-color: #f6f6f6;
 }
-#div2content .A{
+#div2content .department{
+  height: 30px;
+  display: block;
+  padding-left: 7px;
+}
+#div2content .list{
   width: 100%;
-  height: 20px;
-  padding-left: 12px;
   padding-bottom: 3px;
 }
 #div2content .div2result{
   width: 100%;
   height: 30px;
-  border-width: 0 0 1px 0;
+  border-bottom: 1px solid #f6f6f6;
+/*  border-width: 0 0 1px 0;
+  border-color: #f6f6f6;*/
   padding-left: 12px;
+  background-color: #fff;
 }
 .weui-footer{
     padding-top: 5px;
