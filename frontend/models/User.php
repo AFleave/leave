@@ -7,7 +7,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
+use frontend\models\Department;
 /**
  * This is the model class for table "user".
  *
@@ -15,13 +15,16 @@ use yii\web\IdentityInterface;
  * @property string $username
  * @property integer $mobile
  * @property string $email
- * @property integer $organizatio_id
  * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ *
+ * @property LeaveLog[] $leaveLogs
+ * @property Position[] $positions
+ * @property Process[] $processes
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -44,12 +47,12 @@ class User extends ActiveRecord implements IdentityInterface
     // {
     //     return [
     //         [['username', 'mobile', 'auth_key', 'password_hash', 'created_at', 'updated_at'], 'required'],
-    //         [['mobile', 'organizatio_id', 'status', 'created_at', 'updated_at'], 'integer'],
+    //         [['mobile', 'status', 'created_at', 'updated_at'], 'integer'],
     //         [['username', 'email', 'password_hash', 'password_reset_token'], 'string', 'max' => 255],
     //         [['auth_key'], 'string', 'max' => 32],
-    //         [['mobile'], 'integer', 'min' => 11, 'max' => 11, 'message'=>'手机号格式错误'],
     //     ];
     // }
+
 
     public function rules()
     {
@@ -69,7 +72,6 @@ class User extends ActiveRecord implements IdentityInterface
             'username' => 'Username',
             'mobile' => 'Mobile',
             'email' => 'Email',
-            'organizatio_id' => 'Organizatio ID',
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
@@ -79,8 +81,31 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLeaveLogs()
+    {
+        return $this->hasMany(LeaveLog::className(), ['initiator_id' => 'id']);
+    }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPositions()
+    {
+        return $this->hasMany(Position::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProcesses()
+    {
+        return $this->hasMany(Process::className(), ['user_id' => 'id']);
+    }
+
+        /**
      * @inheritdoc
      */
     public function behaviors()
@@ -232,6 +257,23 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /*
+    * 通过用户id返回职务+组织数组
+    */
+    public static function findWorkinfo($id)
+    {
+        $user=self::findIdentity($id);
+        $positions=$user->positions;
+        $workinfo= array();
+        $i=0;
+        foreach ($positions as $position) {
+            $workinfo[$i]["position"]=$position->name;
+            $workinfo[$i]["department"]=Department::findbyId(['id'=>$position->department_id])->name;
+            $i++;
+        }
+        return $workinfo;
     }
 
 }

@@ -160,6 +160,13 @@
   padding: 1px 3px 0px 5px;
   margin-bottom: 3px;
   vertical-align: middle;
+} 
+.hezi .mystep .hisname .icon-question{
+  font-size: 18px;
+  color: #00f;
+  padding: 1px 3px 0px 5px;
+  margin-bottom: 3px;
+  vertical-align: middle;
 }
 .hezi .mystep .hisname span.name{
   font-size: 14px;

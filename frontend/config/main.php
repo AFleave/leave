@@ -49,5 +49,5 @@ return [
     // 配置语言
     'language'=>'zh-CN',
     // 配置时区
-    'timeZone'=>'Asia/Chongqing',
+    'timeZone'=>'Asia/Shanghai',
 ];
