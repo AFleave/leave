@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use frontend\models\User;
 /**
  * This is the model class for table "process".
  *
@@ -11,6 +12,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $log_id
  * @property integer $user_id
  * @property integer $status
+ * @property varchar $desc
  * @property integer $sort
  * @property integer $created_time
  * @property integer $updata_time
@@ -39,8 +41,8 @@ class Process extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'log_id', 'user_id', 'sort', 'created_time'], 'required'],
-            [['id', 'log_id', 'user_id', 'status', 'sort', 'created_time', 'updata_time'], 'integer'],
+            [['log_id', 'user_id', 'sort', 'created_time'], 'required'],
+            [['log_id', 'user_id', 'status', 'sort', 'created_time', 'updata_time'], 'integer'],
             [['log_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveLog::className(), 'targetAttribute' => ['log_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -102,10 +104,11 @@ class Process extends \yii\db\ActiveRecord
         $haveme=array();
         $rows=(new \yii\db\Query())
                 ->from('Process')
-                ->where(['and','user_id'=>$user_id,'status >0'])
+                ->where(['and','user_id ='.$user_id,'status >0'])
                 ->orderBy('updata_time desc') //按照updata_time 倒序
                 ->batch(5); //每次取五条为数组的第一个 假限定取五条 找到办法再改
         $haveme= ArrayHelper::toArray($rows, []);
+        if($haveme==null) return $haveme;
         return $haveme[0];
     }
 
@@ -129,5 +132,36 @@ class Process extends \yii\db\ActiveRecord
         }
     }
 
+
+    /*
+    *根据user_id,leave_log新增数据
+    */
+    public static function addProcess($user_id,$log_id,$sort){
+        $process = new Process();
+        $process->user_id = $user_id;
+        $process->log_id = $log_id;
+        $process->status = self::STATUS_UNDO;
+        $process->created_time = time();
+        $process->sort = $sort;
+        if($process->save()){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    /*
+    *根据 leave_log 返回所有 process 按sort排序 
+    */
+    public static function findMyleave($leavelog_id){
+        $myleaves  = Process::find()->where(['log_id'=>$leavelog_id])->orderBy("sort asc")->all();
+        $myleaves= ArrayHelper::toArray($myleaves, []);
+        $i=0;
+        foreach ($myleaves as $myleave) {
+            $myleaves[$i]['user_id']=User::findOne(['id'=>$myleave['user_id']])->username;
+            $i++;
+        }
+        return $myleaves;
+    }
 }
 

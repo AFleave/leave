@@ -18,6 +18,8 @@ use Yii;
  */
 class Leave extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE =1;
+
     /**
      * @inheritdoc
      */
@@ -65,11 +67,8 @@ class Leave extends \yii\db\ActiveRecord
     /*
     *返回请假类型及id  请假页面
     */
-    public static function findleave(){
-     return   $leave=(new \yii\db\Query())
-                ->select(['id','type'])
-                ->from('leave')
-                ->all();
+    public static function findtype(){
+        return self::find()->where(['status'=>self::STATUS_ACTIVE])->all();
     }
 
 }

@@ -7,17 +7,42 @@ $this->params['breadcrumbs'][] = $this->title;
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
     $(function(){
-        $("#agreen1").click(function(){ 
+        $("#refuse1").click(function(){ 
   			$.ajax({
                     type:"post",
                     url:"http://localhost/myproducts/leave/frontend/web/index.php?r=user/acceptexam",
                     data:{
+                        log_id : "1",
                     	process_id : "1",
-                    	status : "1",
+                    	status : "2",
+                        desc : "我拒绝你请假",
                 },
                     dataType:"text",
                     success: function(data) {
                     	if(data==1){
+                        alert("驳回完成！");
+                        location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
+                    }
+                    },
+                    error:function() {
+                        console.log("驳回失败，请重试！");
+                    }
+              	})
+       	});
+
+                $("#agreen1").click(function(){ 
+            $.ajax({
+                    type:"post",
+                    url:"http://localhost/myproducts/leave/frontend/web/index.php?r=user/acceptexam",
+                    data:{
+                        log_id : "1",
+                        process_id : "1",
+                        status : "1",
+                        desc : "我同意你请假",
+                },
+                    dataType:"text",
+                    success: function(data) {
+                        if(data==1){
                         alert("同意完成！");
                         location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
                     }
@@ -25,10 +50,37 @@ $this->params['breadcrumbs'][] = $this->title;
                     error:function() {
                         console.log("同意失败，请重试！");
                     }
-              	})
-       	});
+                })
+        });
+
+        $("#send1").click(function(){ 
+            $.ajax({
+                    type:"post",
+                    url:"http://localhost/myproducts/leave/frontend/web/index.php?r=user/acceptexam",
+                    data:{
+                        process_id : "1",
+                        status : "3",
+                        addid : "6",
+                        sort : "2",
+                        log_id : "1",
+                        desc : "我转交你请假",
+                },
+                    dataType:"text",
+                    success: function(data) {
+                        if(data==1){
+                        alert("转交完成！");
+                        location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
+                    }else{
+                        alert("转交失败！");
+                    }
+                    },
+                    error:function() {
+                        console.log("转交失败，请重试！");
+                    }
+                })
+        });
     });
-</script>    
+</script>
 
  process_id | 
  process_sort | 
@@ -72,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= Html::encode($have['log_id']['detail']) ?> |
 <?= Html::encode($have['log_id']['begin_time']) ?> |
 <?= Html::encode($have['log_id']['end_time']) ?> |
-<?= Html::encode(date("Y-m-d H:i:s ",$process['log_id']['create_time'])) ?> |
+<?= Html::encode(date("Y-m-d H:i:s ",$have['log_id']['create_time'])) ?> |
 <?= Html::encode($have['sort'])?>|
 
 <?php
@@ -84,6 +136,7 @@ if ($have['status']==1){
  echo "已转交";
 } 
 ?>
+ | 处理时间：<?= Html::encode(date("Y-m-d H:i:s ",$have['updata_time'])) ?> |
 <br>
 <br>
 <?php endforeach ?>

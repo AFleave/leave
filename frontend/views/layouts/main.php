@@ -38,6 +38,8 @@ AppAsset::register($this);
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => '个人信息', 'url' => ['/user/personinfo']],
         ['label' => '待我审批', 'url' => ['/user/waitme']],
+        ['label' => '我的请假', 'url' => ['/user/myleave']],
+        ['label' => '我要请假', 'url' => ['/user/leave']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];

@@ -276,4 +276,12 @@ class User extends ActiveRecord implements IdentityInterface
         return $workinfo;
     }
 
+    /*
+    *返回用户id username 作为审批人  请假页面
+    */
+    public static function findProcer(){
+        return self::find()->where(['status'=>self::STATUS_ACTIVE])->all();
+    }
+
+
 }

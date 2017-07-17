@@ -39,8 +39,8 @@ class LeaveLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'initiator_id', 'leave_id', 'create_time', 'begin_time', 'end_time'], 'required'],
-            [['id', 'initiator_id', 'leave_id', 'create_time', 'begin_time', 'end_time', 'status'], 'integer'],
+            [['initiator_id', 'leave_id', 'create_time', 'begin_time', 'end_time'], 'required'],
+            [['initiator_id', 'leave_id', 'create_time', 'begin_time', 'end_time', 'status'], 'integer'],
             [['initiator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['initiator_id' => 'id']],
             [['leave_id'], 'exist', 'skipOnError' => true, 'targetClass' => Leave::className(), 'targetAttribute' => ['leave_id' => 'id']],
         ];
@@ -104,11 +104,51 @@ class LeaveLog extends \yii\db\ActiveRecord
     }
 
     /*
-    *返回
+    *返回请假信息 by id
     */
     public static function findbyid($id){
         $leaveinfo=self::find()->with('leave')->where(['id'=>$id])->one();
         $leave = ArrayHelper::toArray($leaveinfo, []);
         return $leave;
+    }
+
+    /*
+    *获取返回当前用户处于流程中的请假信息
+    */
+    public static function findleaveundo($user_id ){
+         $leaveundo=LeaveLog::find()
+                    ->where(['and','initiator_id='.$user_id,'status = 0'])
+                    ->orderBy('create_time desc')
+                    ->all();
+         $leaveundo = ArrayHelper::toArray($leaveundo, []);
+         return $leaveundo;
+    }
+
+
+    /*
+    *获取返回当前用户已完成的请假信息
+    */
+    public static function findleavedone($user_id ){
+        $leavedone=LeaveLog::find()
+                    ->where(['and','initiator_id='.$user_id,'status > 0'])
+                    ->orderBy('create_time desc')
+                    ->all();
+         $leavedone = ArrayHelper::toArray($leavedone, []);
+         return $leavedone;
+
+    }
+
+
+    /*
+    *审批之后（同意或驳回） 修改请假日志status
+    */
+    public static function updatestatus($id,$status){
+        $model = self::findOne(['id'=>$id]);
+        $model ->status=$status;
+        if($model->save()>0){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 }
