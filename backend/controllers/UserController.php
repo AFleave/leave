@@ -1,36 +1,29 @@
 <?php
-
 namespace backend\controllers;
 
-use yii\rest\ActiveController;
-//输出格式
-use yii\web\Response;
-//数据序列化
-use yii\rest\Serializer;
-//认证
-use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBasicAuth;		//1
-use yii\filters\auth\HttpBearerAuth;	//2
-use yii\filters\auth\QueryParamAuth;	//3
-//速率限制 ，在认证类里实现接口
-use yii\filters\RateLimiter;
-
 use backend\models\User;
+//输出格式
 use Yii;
+//数据序列化
+//认证
+use yii\filters\auth\CompositeAuth; //1
+use yii\filters\auth\QueryParamAuth; //2
+use yii\filters\RateLimiter; //3
+//速率限制 ，在认证类里实现接口
+use yii\helpers\ArrayHelper;
+use yii\rest\ActiveController;
+use yii\web\Response;
 
-class UserController extends ActiveController{
-	//指向数据模型
-	public $modelClass = 'backend\models\User';
-	//对数据 分页 等操作
-    public $serializer = [
-        'class' => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'items',
-    ];
-	public function behaviors(){
-		$behaviors = parent::behaviors();
+class UserController extends ActiveController
+{
+    //指向数据模型
+    public $modelClass = '\backend\models\User';
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
         //认证
         $behaviors['authenticator'] = [
-            'class' => CompositeAuth::className(),
+            'class'       => CompositeAuth::className(),
             'authMethods' => [
                 /*下面是三种验证access_token方式*/
                 //1.HTTP 基本认证: access token 当作用户名发送，应用在access token可安全存在API使用端的场景，例如，API使用端是运行在一台服务器上的程序。
@@ -44,55 +37,126 @@ class UserController extends ActiveController{
                 // QueryParamAuth::className(),
             ],
             //登录等操作无需 验证
-            'optional' => [
-                    'login',
-                    'signup-test'
+            'optional'    => [
+                'login',
+                'signup-test',
             ],
         ];
-		// 内容协商 输出格式 
+        // 内容协商 输出格式
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
         return $behaviors;
-	}
+    }
+/********************自定义方法开始*********************/
+    public function actionIndex()
+    {
+        //应该返回什么？
+        return 0;
+    }
+    /******返回传入id用户所有信息*********/
+    public function actionView($id)
+    {
+        $user = User::find()->where(['id' => $id,'status' => 1])->one();
+        if (isset($user)) {
+            $this->return['data'] = ArrayHelper::toArray($user, [
+                '\backend\models\User' => [
+                    'id',
+                    'username',
+                    'mobile',
+                    'email',
+                    'position' => function ($model) {
+                        $tmp       = '';
+                        $positions = $model->positions;
+                        foreach ($positions as $key => $position) {
+                            $tmp[$key]['departmentName'] = $position->department->name;
+                            $tmp[$key]['positionName'] = $position->name;
+                        }
+                        return $tmp;
+                    }
+                ],
+            ]);
+        } else {
+            $this->return['isSuccessful'] = false;
+            $this->return['code']         = 4004;
+            $this->return['message']      = '资源不存在';
+        }
+        return $this->return;
+    }
+    /***********修改用户资料**************/
+    public function actionUpdate($id)
+    {
+        $model = User::findOne(['id' => $id,'status' => 1]);
+        if (isset($model)) {
+            // 前端页面没用activeForm（没传model）,第二个参数要填（具体看源码）
+            if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
+                $this->return['data'] = $model;
+            } else {
+                $this->return['isSuccessful'] = false;
+                $this->return['code']         = 4001;
+                $this->return['message']      = '验证不通过';
+            }
+        } else {
+            $this->return['isSuccessful'] = false;
+            $this->return['code']         = 4004;
+            $this->return['message']      = '资源不存在';
+        }
+        return $this->return;
+    }
+    /*********新增用户***************/
+    public function actionCreate()
+    {
+        $model = new User();
+        $post = Yii::$app->request->post();
+        if ($model->load($post, '') && $model->save()) {
+        	$this->return['data'] = $model;
+        }else{
+            $this->return['isSuccessful'] = false;
+	        $this->return['code']         = 4001;
+	        $this->return['message']      = '验证不通过';
+        }
+        return $this->return['data'];
+    }
+    /*
+        获取该人所有请假单
+    */
+    public function actionGetLeaveLog(){
+        
+    }
+/********************自定义方法结束*********************/
+
+/***************额外*************************/
+    //对数据 分页 等操作
+    // public $serializer = [
+    //     'class' => 'yii\rest\Serializer',
+    //     'collectionEnvelope' => 'items',
+    // ];
     // 覆盖 ActiveController 的actions方法
-	public function actions()
-	{
-	    $actions = parent::actions();	// 父类有所有方法
-	    // 禁用"delete" 和 "create" 动作,必需禁用 下面才能覆盖
-	    // unset($actions['delete'], $actions['create']);
-	    // 使用"prepareDataProvider()"方法自定义数据provider 
-	    // $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-	    return $actions;
-	}
-	public function actionTest(){
-		return 0;
-	}
-	public function actionAdd(){
-		$request = Yii::$app->request;
-		$b = $request->post();
-		return $b;
-	}
-	public function actionSearch($id){
-		$user = User::findOne(array('id' => $id));
-		return $user;
-	}
-	public function prepareDataProvider()
-	{
-		// echo '调用了prepareDataProvider()';
-	    // 为"index"动作准备和返回数据provider
-	}
-	// 覆盖 ActiveController 的checkAccess 方法 授权
-	// 默认action在父类调用了checkaccess方法，因此自定义 action 应 调用 checkaccess方法 
-	public function checkAccess($action, $model = null, $params = [])
-	{
-	    // 检查用户能否访问 $action 和 $model
-	    // 访问被拒绝应抛出ForbiddenHttpException 
-	    // if ($action === 'update' || $action === 'delete') {
-	    //     if ($model->author_id !== \Yii::$app->user->id)
-	    //         throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action));
-	    // }
-	    //试一下
-	    // if($action === 'index'){
-	    // 	throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action));
-	    // }
-	}			
+    public function actions()
+    {
+        $actions = parent::actions(); // 父类有所有方法
+        // 禁用"delete" 和 "create" 动作,必需禁用 下面才能覆盖
+        unset($actions['delete'], $actions['create'], $actions['view'], $actions['index'], $actions['update']);
+        // 使用"prepareDataProvider()"方法自定义数据provider
+        // $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+        return $actions;
+    }
+    public function prepareDataProvider()
+    {
+        // echo '调用了prepareDataProvider()';
+        // 为"index"动作准备和返回数据provider
+    }
+    // 覆盖 ActiveController 的checkAccess 方法 授权
+    // 默认action在父类调用了checkaccess方法，因此自定义 action 应 调用 checkaccess方法
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        // 检查用户能否访问 $action 和 $model
+        // 访问被拒绝应抛出ForbiddenHttpException
+        // if ($action === 'update' || $action === 'delete') {
+        //     if ($model->author_id !== \Yii::$app->user->id)
+        //         throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action));
+        // }
+        //试一下
+        // if($action === 'index'){
+        //     throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action));
+        // }
+    }
 }
