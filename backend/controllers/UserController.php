@@ -101,7 +101,7 @@ class UserController extends ActiveController
         }
         return $this->return;
     }
-    /*********新增用户***************/
+    /************新增用户***************/
     public function actionCreate()
     {
         $model = new User();
@@ -116,7 +116,7 @@ class UserController extends ActiveController
         return $this->return['data'];
     }
     /*
-        获取该人所有请假单
+        在这里获取该人所有请假单  ? 或是在leaveLog里写？
     */
     public function actionGetLeaveLog(){
         

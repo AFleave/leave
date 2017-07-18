@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use backend\models\LeaveLog;
+use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
 use yii\web\Response;
@@ -16,14 +17,14 @@ class LeaveLogController extends ActiveController
         return $behaviors;
     }
     /*
-    获取当前登录用户所有请假信息
+    获取当前登录用户所有请假信息(根据参数？)
      */
     public function actionIndex()
     {
         $id    = 4;
-        $model = LeaveLog::findAll(['initiator_id' => $id , 'status' => 1]);
+        $model = LeaveLog::findAll(['initiator_id' => $id, 'status' => 1]);
         if (isset($model)) {
-            
+            return 0;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -88,4 +89,17 @@ class LeaveLogController extends ActiveController
         }
         return $this->return['data'];
     }
+    /*
+    一个部门一段时间请假数量
+     */
+    public function actionGetDepartmeny(){
+        
+    }
+    /*
+    一个人一段时间请假数量
+     */
+    /*
+
+ */
+
 }

@@ -66,9 +66,6 @@ return [
                         //登录注册跳转
                         'POST login'          => 'login',
                         'GET signup-test'     => 'signup-test',
-
-                        'PUT <id:\d+>'        => 'update',
-                        'POST'                => 'create',
                         // 说明
                         'GET search/<id:\d+>' => 'search', //一个参数，参数名为id,且参数必需为数字（限制）
                         'GET a/<p1>/<p2>'     => 'a', //二个参数，参数名分别为p1，p2，参数无限制
@@ -78,35 +75,29 @@ return [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'department',
                     'extraPatterns' => [
-                        'GET'                        => 'index',
-                        'POST'                       => 'create',
-                        'PUT <id:\d+>'               => 'update',
                         'GET <dep_id:\d+>/positions' => 'get-positions',
-
+                        'GET positions' => 'get-all-positions',
                     ],
                 ],
                 [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'position',
                     'extraPatterns' => [
-                        'GET'          => 'index',
-                        'GET <id:\d+>' => 'view',
-                        'PUT <id:\d+>' => 'update',
+
                     ],
                 ],
                 [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'leave',
                     'extraPatterns' => [
-                        'GET'          => 'index',
-                        'GET <id:\d+>' => 'view',
-                        'PUT <id:\d+>' => 'update',
+
                     ],
                 ],
                 [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'leave-log',
                     'extraPatterns' => [
+
 
                     ],
                 ],

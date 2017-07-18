@@ -19,6 +19,9 @@ class PositionController extends ActiveController
     {
         return 0;
     }
+    /*
+    貌似没必要的方法
+    */
     public function actionView($id)
     {
         $position = Position::findOne(['id' => $id, 'status' => 1]);
@@ -42,6 +45,9 @@ class PositionController extends ActiveController
         }
         return $this->return;
     }
+    /*
+        修改职位信息，如该职位部门变更
+    */
     public function actionUpdate($id){
         $model = Position::findOne(['id' => $id,'status' => 1]);
         if (isset($model)) {
