@@ -20,6 +20,25 @@ return [
                 'application/json' => 'yii\web\JsonParser',
             ],
         ],
+        //设置返回格式无论如何都为json
+        'response'     => [
+            'class'         => 'yii\web\Response',
+            'on beforeSend' => function ($event) {
+                $response = $event->sender;
+                $code     = $response->getStatusCode();
+                $msg      = $response->statusText;
+                if ($code == 404) {
+                    !empty($response->data['message']) && $msg = $response->data['message'];
+                }
+                $data = [
+                    'code' => $code,
+                    'msg'  => $msg,
+                ];
+                $code == 200 && $data['data'] = $response->data;
+                $response->data               = $data;
+                $response->format             = yii\web\Response::FORMAT_JSON;
+            },
+        ],
         'db'           => [
             'class'    => 'yii\db\Connection',
             'dsn'      => 'mysql:host=localhost;dbname=aleave',
@@ -28,7 +47,7 @@ return [
             'charset'  => 'utf8',
         ],
         'user'         => [
-            'identityClass'   => 'common\models\User',
+            'identityClass'   => 'backend\models\User',
             'enableAutoLogin' => true,
             'identityCookie'  => ['name' => '_identity-backend', 'httpOnly' => true],
             'enableSession'   => false, //不通过session来验证，因api无状态
@@ -76,7 +95,7 @@ return [
                     'controller'    => 'department',
                     'extraPatterns' => [
                         'GET <dep_id:\d+>/positions' => 'get-positions',
-                        'GET positions' => 'get-all-positions',
+                        'GET positions'              => 'get-all-positions',
                     ],
                 ],
                 [
@@ -90,7 +109,6 @@ return [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'leave',
                     'extraPatterns' => [
-
                     ],
                 ],
                 [
@@ -98,14 +116,13 @@ return [
                     'controller'    => 'leave-log',
                     'extraPatterns' => [
 
-
                     ],
                 ],
                 [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'process',
                     'extraPatterns' => [
-                        'GET me'   => 'index',
+                        'GET me' => 'index',
                     ],
                 ],
                 // 'login' => 'site/login', //普通方式：指定 路由为/web/login 即跳转到site/login

@@ -1,18 +1,19 @@
 <?php
 namespace backend\controllers;
 
-use backend\models\User;
 //输出格式
-use Yii;
+use backend\models\LoginForm;
 //数据序列化
 //认证
-use yii\filters\auth\CompositeAuth; //1
-use yii\filters\auth\QueryParamAuth; //2
-use yii\filters\RateLimiter; //3
+use backend\models\User; //1
+use Yii; //2
+use yii\filters\auth\CompositeAuth; //3
 //速率限制 ，在认证类里实现接口
+use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
 use yii\web\Response;
+use yii\web\IdentityInterface;
 
 class UserController extends ActiveController
 {
@@ -34,19 +35,49 @@ class UserController extends ActiveController
                 //http://localhost/user/index/index?access-token=123
                 //http://localhost/yii/frontend/web/books?access-token=123
                 // http://localhost/yii/frontend/web/books/1?access-token=123
-                // QueryParamAuth::className(),
+                QueryParamAuth::className(),
             ],
-            //登录等操作无需 验证
+            //登录操作无需 验证
             'optional'    => [
                 'login',
                 'signup-test',
             ],
         ];
         // 内容协商 输出格式
-        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
+        // $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
         return $behaviors;
     }
 /********************自定义方法开始*********************/
+    public function actionSignupTest()
+    {
+        $user = new User();
+        $user->generateAuthKey();
+        $user->setPassword('123456');
+        $user->username   = 'test';
+        $user->mobile     = 15581646116;
+        $user->email      = '1017990427@qq.com';
+        $user->created_at = 1561313;
+        $user->updated_at = 48461546;
+        $user->save();
+        return 0;
+    }
+    public function actionLogin()
+    {
+        $model = new LoginForm();
+        $model->setAttributes(Yii::$app->request->post());
+        if ($user = $model->login()) {
+            if ($user instanceof IdentityInterface) {
+                //instanceof 判断 变量是否属于该类的实例
+                //用user接受返回的user,方便返回token，只需返回token！
+                return $user->api_token;
+            } else {
+                return $user->errors;
+            }
+        } else {
+            return $model->errors;
+        }
+
+    }
     public function actionIndex()
     {
         //应该返回什么？
@@ -55,7 +86,7 @@ class UserController extends ActiveController
     /******返回传入id用户所有信息*********/
     public function actionView($id)
     {
-        $user = User::find()->where(['id' => $id,'status' => 1])->one();
+        $user = User::find()->where(['id' => $id, 'status' => 1])->one();
         if (isset($user)) {
             $this->return['data'] = ArrayHelper::toArray($user, [
                 '\backend\models\User' => [
@@ -68,10 +99,10 @@ class UserController extends ActiveController
                         $positions = $model->positions;
                         foreach ($positions as $key => $position) {
                             $tmp[$key]['departmentName'] = $position->department->name;
-                            $tmp[$key]['positionName'] = $position->name;
+                            $tmp[$key]['positionName']   = $position->name;
                         }
                         return $tmp;
-                    }
+                    },
                 ],
             ]);
         } else {
@@ -84,7 +115,7 @@ class UserController extends ActiveController
     /***********修改用户资料**************/
     public function actionUpdate($id)
     {
-        $model = User::findOne(['id' => $id,'status' => 1]);
+        $model = User::findOne(['id' => $id, 'status' => 1]);
         if (isset($model)) {
             // 前端页面没用activeForm（没传model）,第二个参数要填（具体看源码）
             if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
@@ -101,25 +132,12 @@ class UserController extends ActiveController
         }
         return $this->return;
     }
-    /************新增用户***************/
-    public function actionCreate()
-    {
-        $model = new User();
-        $post = Yii::$app->request->post();
-        if ($model->load($post, '') && $model->save()) {
-        	$this->return['data'] = $model;
-        }else{
-            $this->return['isSuccessful'] = false;
-	        $this->return['code']         = 4001;
-	        $this->return['message']      = '验证不通过';
-        }
-        return $this->return['data'];
-    }
     /*
-        在这里获取该人所有请假单  ? 或是在leaveLog里写？
-    */
-    public function actionGetLeaveLog(){
-        
+    在这里获取该人所有请假单  ? 或是在leaveLog里写？
+     */
+    public function actionGetLeaveLog()
+    {
+
     }
 /********************自定义方法结束*********************/
 

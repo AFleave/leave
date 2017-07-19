@@ -99,8 +99,10 @@ class DepartmentController extends ActiveController
                             $tmp       = '';
                             $positions = $model->positions;
                             foreach ($positions as $key => $position) {
-                                $tmp[$key][$position->user->id] = $position->user->username;
-                                $tmp[$key][$position->id]       = $position->name;
+                                $tmp[$key]['position_id']    = $position->user->id;
+                                 $tmp[$key]['position_name'] = $position->name;
+                                $tmp[$key]['user_id']        = $position->user->id;
+                                $tmp[$key]['username']       = $position->user->username;
                             }
                             return $tmp;
                         },
@@ -154,7 +156,7 @@ class DepartmentController extends ActiveController
         return $this->return;
     }
     /*
-    获取该部门请假信息 
+    获取该部门请假信息
      */
     public function actionGetLeaveLog($id)
     {
