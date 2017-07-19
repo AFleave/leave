@@ -5,33 +5,13 @@ $this->title = '待我审批';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
 <script type="text/javascript">
     $(function(){
-        $("#refuse1").click(function(){ 
-  			$.ajax({
-                    type:"post",
-                    url:"http://localhost/myproducts/leave/frontend/web/index.php?r=user/acceptexam",
-                    data:{
-                        log_id : "1",
-                    	process_id : "1",
-                    	status : "2",
-                        desc : "我拒绝你请假",
-                },
-                    dataType:"text",
-                    success: function(data) {
-                    	if(data==1){
-                        alert("驳回完成！");
-                        location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
-                    }
-                    },
-                    error:function() {
-                        console.log("驳回失败，请重试！");
-                    }
-              	})
-       	});
-
-                $("#agreen1").click(function(){ 
-            $.ajax({
+        var dom = $('.list');
+        $.each(dom,function(index,value){
+            $(value).find('.agreen').click(function(){
+                $.ajax({
                     type:"post",
                     url:"http://localhost/myproducts/leave/frontend/web/index.php?r=user/acceptexam",
                     data:{
@@ -39,47 +19,72 @@ $this->params['breadcrumbs'][] = $this->title;
                         process_id : "1",
                         status : "1",
                         desc : "我同意你请假",
-                },
+                    },
                     dataType:"text",
                     success: function(data) {
                         if(data==1){
-                        alert("同意完成！");
-                        location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
-                    }
+                            alert("同意完成！");
+                            location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
+                        }
                     },
                     error:function() {
                         console.log("同意失败，请重试！");
                     }
                 })
-        });
-
-        $("#send1").click(function(){ 
-            $.ajax({
+            });
+            $(value).find('.refuse').click(function(){
+                $.ajax({
                     type:"post",
                     url:"http://localhost/myproducts/leave/frontend/web/index.php?r=user/acceptexam",
                     data:{
-                        process_id : "1",
-                        status : "3",
-                        addid : "6",
-                        sort : "2",
                         log_id : "1",
-                        desc : "我转交你请假",
-                },
+                        process_id : "1",
+                        status : "2",
+                        desc : "我拒绝你请假",
+                    },
                     dataType:"text",
                     success: function(data) {
                         if(data==1){
-                        alert("转交完成！");
-                        location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
-                    }else{
-                        alert("转交失败！");
-                    }
+                            alert("驳回完成！");
+                            location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
+                        }
                     },
                     error:function() {
-                        console.log("转交失败，请重试！");
+                        console.log("驳回失败，请重试！");
                     }
                 })
+            });
+            $(value).find('.send').click(function(){
+                $.ajax({
+                        type:"post",
+                        url:"http://localhost/myproducts/leave/frontend/web/index.php?r=user/acceptexam",
+                        data:{
+                            process_id : "1",
+                            status : "3",
+                            addid : "6",
+                            sort : "2",
+                            log_id : "1",
+                            desc : "我转交你请假",
+                        },
+                        dataType:"text",
+                        success: function(data) {
+                            if(data==1){
+                                alert("转交完成！");
+                                location.reload('http://localhost/myproducts/leave/frontend/web/index.php?r=user/waitme');
+                            }else{
+                                alert("转交失败！");
+                            }
+                        },
+                        error:function() {
+                            console.log("转交失败，请重试！");
+                        }
+                    })
+            });
+            // alert($(value).find('.agreen'))
+            // console.log($(value).find('.agreen'));
         });
-    });
+    })
+
 </script>
 
  process_id | 
@@ -96,7 +101,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <hr>
 待处理的审批
 <hr>
+
 <?php foreach ($processs as $process): ?>
+<form method="get" class="list">
 <?= Html::encode($process['id'])  ?>|
 <?= Html::encode($process['sort']) ?>|
 <?= Html::encode($process['log_id']['id']) ?>|
@@ -106,11 +113,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= Html::encode($process['log_id']['begin_time']) ?> |
 <?= Html::encode($process['log_id']['end_time']) ?> |
 <?= Html::encode(date("Y-m-d H:i:s ",$process['log_id']['create_time'])) ?> 
-<button type="button" id="agreen<?= Html::encode($process['id'])  ?>">同意</button>
-<button type="button" id="refuse<?= Html::encode($process['id'])  ?>">驳回</button>
-<button type="button" id="send<?= Html::encode($process['id'])  ?>">转交</button>
+<button class="agreen" type="button">同意</button>
+<button class="refuse" type="button">驳回</button>
+<button class="send" type="button">转交</button>
 <br>
 <br>
+</form>
 <?php endforeach ?>
 <hr>
 已处理的审批
