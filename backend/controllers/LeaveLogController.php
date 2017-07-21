@@ -21,10 +21,10 @@ class LeaveLogController extends ActiveController
      */
     public function actionIndex()
     {
-        $id    = 4;
-        $model = LeaveLog::findAll(['initiator_id' => $id, 'status' => 1]);
+        $id    = 5;
+        $model = LeaveLog::findAll(['initiator_id' => $id, 'status' => [1,2]]);
         if (isset($model)) {
-            return 0;
+            $this->return['data'] = $model; 
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -37,7 +37,7 @@ class LeaveLogController extends ActiveController
      */
     public function actionView($id)
     {
-        $model = LeaveLog::findOne(['id' => $id, 'status' => 1]);
+        $model = LeaveLog::findOne(['id' => $id, 'status' => 0]);
         if (isset($model)) {
             $this->return['data'] = ArrayHelper::toArray($model, [
                 'backend\models\LeaveLog' => [
@@ -58,9 +58,11 @@ class LeaveLogController extends ActiveController
                         $tmp       = '';
                         $processes = $model->processes;
                         foreach ($processes as $key => $process) {
-                            $tmp[$process->sort]['user_id'] = $process->user->username;
-                            $tmp[$process->sort]['status']  = $process->status;
-                            $tmp[$process->sort]['desc']    = $process->desc;
+                            $sort = $process->sort;
+                            $tmp[$sort]['user_id'] = $process->user->id;
+                            $tmp[$sort]['username'] = $process->user->username;
+                            $tmp[$sort]['status']  = $process->status;
+                            $tmp[$sort]['desc']    = $process->desc;
                         }
                         return $tmp;
                     },
