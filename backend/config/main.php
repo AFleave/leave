@@ -66,9 +66,9 @@ return [
                 ],
             ],
         ],
-        'errorHandler' => [
-            'errorAction' => 'site/error',
-        ],
+        // 'errorHandler' => [
+        //     'errorAction' => 'user/error',
+        // ],
 
         'urlManager'   => [
             'enablePrettyUrl'     => true, //用rest，美化路由必需开启
@@ -84,6 +84,7 @@ return [
                         // 'url' => '方法名'
                         //登录注册跳转
                         'POST login'          => 'login',
+                        'POST signup'          => 'signup',
                         'GET signup-test'     => 'signup-test',
                         // 说明
                         'GET search/<id:\d+>' => 'search', //一个参数，参数名为id,且参数必需为数字（限制）

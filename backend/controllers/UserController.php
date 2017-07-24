@@ -6,6 +6,7 @@ use backend\models\LoginForm;
 //数据序列化
 //认证
 use backend\models\User; //1
+use backend\models\SignupForm;
 use Yii; //2
 use yii\filters\auth\CompositeAuth; //3
 //速率限制 ，在认证类里实现接口
@@ -41,6 +42,7 @@ class UserController extends ActiveController
             'optional'    => [
                 'login',
                 'signup-test',
+                'signup',
             ],
         ];
         // 内容协商 输出格式
@@ -177,4 +179,20 @@ class UserController extends ActiveController
         //     throw new \yii\web\ForbiddenHttpException(sprintf('You can only %s articles that you\'ve created.', $action));
         // }
     }
+
+
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+        $model->setAttributes(Yii::$app->request->post());
+        if ($api_token = $model->signup()) {
+                return [
+                    'isSuccessful'=>true,
+                    'api_token'=>$api_token,
+                ];
+        }else{
+            return $model->errors;
+        }
+     }
+
 }

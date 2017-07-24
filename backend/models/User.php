@@ -32,6 +32,10 @@ use \yii\web\UnauthorizedHttpException;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 1;
+
     // public static $api_token;
     /****************认证类**********************************/
     /*接口五方法开始*/
@@ -76,7 +80,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateApiToken()
     //这里方法不能静态化因为方法里要设置 对象 的属性
     {
-        $this->status = 5;
         $this->api_token = Yii::$app->security->generateRandomString() . '_' . time();
         //随机字符串 加 当前时间戳
     }
@@ -100,10 +103,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username]);
     }
+    
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
+
     /****************认证类***********************************/
     public static function tablename()
     {
@@ -112,7 +117,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'mobile', 'auth_key', 'password_hash', 'created_at', 'updated_at'], 'required'],
+            [['username', 'mobile', 'auth_key', 'password_hash', 'created_at'], 'required'],
             [['mobile', 'status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'email', 'password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -205,4 +210,11 @@ class User extends ActiveRecord implements IdentityInterface
     //         // }
     //     ];
     // }
+
+    public static function findByMobile($mobile)
+    {
+        return static::findOne(['mobile' => $mobile, 'status' => self::STATUS_ACTIVE]);
+    }
+
+
 }

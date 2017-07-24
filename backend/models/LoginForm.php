@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
  */
 class LoginForm extends Model
 {
-    public $username;
+    public $mobile;
     public $password;
 
     private $_user;
@@ -60,7 +60,7 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [['username', 'password'], 'required', 'message' => '账号或密码不得为空'],
+            [['mobile', 'password'], 'required', 'message' => '手机号或密码不得为空'],
             ['password', 'validatePassword'],
         ];
     }
@@ -69,14 +69,14 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, '账号或密码不对.');
+                $this->addError($attribute, '手机号或密码不对.');
             }
         }
     }
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::findByMobile($this->mobile);
         }
 
         return $this->_user;
