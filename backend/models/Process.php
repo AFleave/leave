@@ -35,8 +35,8 @@ class Process extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'log_id', 'user_id', 'sort', 'created_time'], 'required'],
-            [['id', 'log_id', 'user_id', 'status', 'sort', 'created_time', 'updata_time'], 'integer'],
+            [['log_id', 'user_id', 'sort', 'created_time'], 'required'],
+            [['log_id', 'user_id', 'status', 'sort', 'created_time', 'updata_time'], 'integer'],
             [['desc'], 'string', 'max' => 255],
             [['log_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveLog::className(), 'targetAttribute' => ['log_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],

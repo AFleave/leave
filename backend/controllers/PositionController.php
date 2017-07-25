@@ -46,6 +46,7 @@ class PositionController extends ActiveController
                 	},
                 ]
             ]);
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -61,6 +62,7 @@ class PositionController extends ActiveController
         if (isset($model)) {
             if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
                 $this->return['data'] = $model;
+                $this->return['isSuccessful'] = true;
             } else {
                 $this->return['isSuccessful'] = false;
                 $this->return['code']         = 4001;
@@ -85,6 +87,7 @@ class PositionController extends ActiveController
         $model->created_time=time();
         if ($model->load($post, '') && $model->save()) {
             $this->return['data'] = $model;
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4001;

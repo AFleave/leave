@@ -72,6 +72,7 @@ class LeaveLogController extends ActiveController
                     },
                 ],
             ]);
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -147,6 +148,7 @@ class LeaveLogController extends ActiveController
                     },
                 ],
             ]);
+        $this->return['isSuccessful'] = true;
     } else {
         $this->return['isSuccessful'] = false;
         $this->return['code']         = 4004;

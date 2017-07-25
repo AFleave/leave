@@ -107,6 +107,7 @@ class UserController extends ActiveController
                     },
                 ],
             ]);
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -122,12 +123,14 @@ class UserController extends ActiveController
             $model->updated_at=time();
             // 前端页面没用activeForm（没传model）,第二个参数要填（具体看源码）
             if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
+                $this->return['isSuccessful'] = true;
                 $this->return['data'] = $model;
             } else {
                 $this->return['isSuccessful'] = false;
                 $this->return['code']         = 4001;
                 $this->return['message']      = '验证不通过';
             }
+
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;

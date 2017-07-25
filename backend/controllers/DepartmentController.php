@@ -32,6 +32,7 @@ class DepartmentController extends ActiveController
         $departments = Department::find()->where(['status' => 1])->orderBy('create_time')->all();
         if (isset($departments)) {
             $this->return['data'] = $departments;
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -47,6 +48,7 @@ class DepartmentController extends ActiveController
         $department = Department::findOne(['id' => $id, 'status' => 1]);
         if (isset($department)) {
             $this->return['data'] = $department;
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -80,6 +82,7 @@ class DepartmentController extends ActiveController
                     },
                 ],
             ]);
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -117,6 +120,7 @@ class DepartmentController extends ActiveController
                     ],
                 ]);
             }
+            $this->return['isSuccessful'] = true;
         } else {
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
@@ -133,6 +137,7 @@ class DepartmentController extends ActiveController
         $post  = Yii::$app->request->post();
         $model->create_time=time();
         if ($model->load($post, '') && $model->save()) {
+            $this->return['isSuccessful'] = true;
             $this->return['data'] = $model;
         } else {
             $this->return['isSuccessful'] = false;
@@ -151,6 +156,7 @@ class DepartmentController extends ActiveController
         if (isset($model)) {
             $model->updata_time=time();
             if ($model->load($post, '') && $model->save()) {
+                $this->return['isSuccessful'] = true;
                 $this->return['data'] = $model;
             } else {
                 $this->return['isSuccessful'] = false;

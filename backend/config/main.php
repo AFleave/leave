@@ -125,7 +125,7 @@ return [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'process',
                     'extraPatterns' => [
-                        'GET index' => 'index',
+                        
                     ],
                 ],
                 // 'login' => 'site/login', //普通方式：指定 路由为/web/login 即跳转到site/login

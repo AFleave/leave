@@ -30,6 +30,7 @@ class LeaveController extends ActiveController
     {
         $model = Leave::findAll(['status' => 1]);
         if (isset($model)) {
+            $this->return['isSuccessful'] = true;
             $this->return['data'] = $model;
         } else {
             $this->return['isSuccessful'] = false;
@@ -45,6 +46,7 @@ class LeaveController extends ActiveController
     {
         $model = Leave::findOne(['id' => $id, 'status' => 1]);
         if (isset($model)) {
+            $this->return['isSuccessful'] = true;
             $this->return['data'] = $model;
         } else {
             $this->return['isSuccessful'] = false;
@@ -62,6 +64,7 @@ class LeaveController extends ActiveController
         if ($model) {
             $model->update_time=time();
             if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
+                $this->return['isSuccessful'] = true;
                 $this->return['data'] = $model;
             } else {
                 $this->return['isSuccessful'] = false;
