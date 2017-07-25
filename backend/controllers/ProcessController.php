@@ -1,6 +1,8 @@
 <?php
 namespace backend\controllers;
 
+use yii\filters\auth\CompositeAuth; 
+use yii\filters\auth\QueryParamAuth;
 use backend\models\Process;
 use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
@@ -11,16 +13,21 @@ class ProcessController extends ActiveController
     public $modelClass = '\backend\models\Process';
     public function behaviors()
     {
-        $behaviors                                              = parent::behaviors();
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class'       => CompositeAuth::className(),
+            'authMethods' => [
+                QueryParamAuth::className(),
+            ],
+        ];
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
         return $behaviors;
     }
     /*
     获取当前登录用户的审批(默认为未审批的)
      */
-    public function actionIndex($status = 0)
+    public function actionProcess($id)
     {
-        $id        = 5;//伪用户
         $processes = Process::find()->where(['status' => $status, 'user_id' => $id])->orderBy('created_time')->all();
         if (isset($processes)) {
             foreach ($processes as $process) {

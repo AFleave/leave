@@ -91,7 +91,7 @@ class UserController extends ActiveController
         $user = User::find()->where(['id' => $id, 'status' => 1])->one();
         if (isset($user)) {
             $this->return['data'] = ArrayHelper::toArray($user, [
-                '\backend\models\User' => [
+                'backend\models\User' => [
                     'id',
                     'username',
                     'mobile',
@@ -119,6 +119,7 @@ class UserController extends ActiveController
     {
         $model = User::findOne(['id' => $id, 'status' => 1]);
         if (isset($model)) {
+            $model->updated_at=time();
             // 前端页面没用activeForm（没传model）,第二个参数要填（具体看源码）
             if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
                 $this->return['data'] = $model;
@@ -180,7 +181,9 @@ class UserController extends ActiveController
         // }
     }
 
-
+    /*
+    *用户注册
+    */
     public function actionSignup()
     {
         $model = new SignupForm();
@@ -193,6 +196,6 @@ class UserController extends ActiveController
         }else{
             return $model->errors;
         }
-     }
+    }
 
 }

@@ -1,6 +1,8 @@
 <?php
 namespace backend\controllers;
 
+use yii\filters\auth\CompositeAuth; 
+use yii\filters\auth\QueryParamAuth;
 use backend\models\Department;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -12,7 +14,13 @@ class DepartmentController extends ActiveController
     public $modelClass = '\backend\models\Department';
     public function behaviors()
     {
-        $behaviors                                              = parent::behaviors();
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class'       => CompositeAuth::className(),
+            'authMethods' => [
+                QueryParamAuth::className(),
+            ],
+        ];
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
         return $behaviors;
     }
@@ -123,6 +131,7 @@ class DepartmentController extends ActiveController
     {
         $model = new department();
         $post  = Yii::$app->request->post();
+        $model->create_time=time();
         if ($model->load($post, '') && $model->save()) {
             $this->return['data'] = $model;
         } else {
@@ -140,6 +149,7 @@ class DepartmentController extends ActiveController
         $model = department::findOne(['id' => $id, 'status' => 1]);
         $post  = Yii::$app->request->post();
         if (isset($model)) {
+            $model->updata_time=time();
             if ($model->load($post, '') && $model->save()) {
                 $this->return['data'] = $model;
             } else {

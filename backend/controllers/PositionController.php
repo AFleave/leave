@@ -1,6 +1,8 @@
 <?php
 namespace backend\controllers;
 use Yii;
+use yii\filters\auth\CompositeAuth; 
+use yii\filters\auth\QueryParamAuth;
 use backend\models\Position;
 use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
@@ -11,7 +13,13 @@ class PositionController extends ActiveController
     public $modelClass = '\backend\models\Position';
     public function behaviors()
     {
-        $behaviors                                              = parent::behaviors();
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class'       => CompositeAuth::className(),
+            'authMethods' => [
+                QueryParamAuth::className(),
+            ],
+        ];
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
         return $behaviors;
     }
@@ -20,11 +28,11 @@ class PositionController extends ActiveController
         return 0;
     }
     /*
-    貌似没必要的方法
+    根据user_id返回职务信息
     */
     public function actionView($id)
     {
-        $position = Position::findOne(['id' => $id, 'status' => 1]);
+        $position = Position::findOne(['user_id' => $id, 'status' => 1]);
         if (isset($position)) {
             $this->return['data'] = ArrayHelper::toArray($position, [
                 'backend\models\Position' => [
@@ -62,6 +70,25 @@ class PositionController extends ActiveController
             $this->return['isSuccessful'] = false;
             $this->return['code']         = 4004;
             $this->return['message']      = '资源不存在';
+        }
+        return $this->return;
+    }
+
+
+    /*
+    *新增职务信息
+    */
+    public function actionCreate()
+    {
+        $model = new position();
+        $post  = Yii::$app->request->post();
+        $model->created_time=time();
+        if ($model->load($post, '') && $model->save()) {
+            $this->return['data'] = $model;
+        } else {
+            $this->return['isSuccessful'] = false;
+            $this->return['code']         = 4001;
+            $this->return['message']      = '验证不通过';
         }
         return $this->return;
     }

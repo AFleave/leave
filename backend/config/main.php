@@ -41,7 +41,7 @@ return [
         ],
         'db'           => [
             'class'    => 'yii\db\Connection',
-            'dsn'      => 'mysql:host=localhost;dbname=aleave',
+            'dsn'      => 'mysql:host=localhost;dbname=api',
             'username' => 'root',
             'password' => '',
             'charset'  => 'utf8',
@@ -86,6 +86,7 @@ return [
                         'POST login'          => 'login',
                         'POST signup'          => 'signup',
                         'GET signup-test'     => 'signup-test',
+                        //'GET view' => 'view',
                         // 说明
                         'GET search/<id:\d+>' => 'search', //一个参数，参数名为id,且参数必需为数字（限制）
                         'GET a/<p1>/<p2>'     => 'a', //二个参数，参数名分别为p1，p2，参数无限制
@@ -103,7 +104,7 @@ return [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'position',
                     'extraPatterns' => [
-
+                        'GET index' => 'index',
                     ],
                 ],
                 [
@@ -116,14 +117,15 @@ return [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'leave-log',
                     'extraPatterns' => [
-
+                        'GET index' => 'index',
+                        'GET alllog/<id:\d+>'=> 'alllog',
                     ],
                 ],
                 [
                     'class'         => 'yii\rest\UrlRule',
                     'controller'    => 'process',
                     'extraPatterns' => [
-                        'GET me' => 'index',
+                        'GET index' => 'index',
                     ],
                 ],
                 // 'login' => 'site/login', //普通方式：指定 路由为/web/login 即跳转到site/login
