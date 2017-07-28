@@ -20,18 +20,46 @@
     <div id="contect">
         <div id="select">
             <a class="">待定审批 (1)</A>
-            <a class="">审批历史 (5)</a>
+            <a class="">请假历史 (5)</a>
             <a class="active">我的流程 (1)</a>
         </div>
         <div id="contruction">
             <div class="hezi">
-                <div class="outone">
+                <div class="outtwo">
                     <h5>待定审批</h5>
                     <p class="person">提交人：系统管理员</p>
                     <p class="because">假别：病假</p>
                     <p class="time">开始时间：2017-05-09 20:38:20.0</p>
                     <p class="time">结束时间：2017-05-09 20:38:20.0</p>
-                    <!-- <div class="result"><img src="images/good.png" alt="">通过 &nbsp;&nbsp;&nbsp;2017-05-10 10:34</div> -->
+                    <p class="myreason">请假理由：家中有事急需处理，请假两天，望批准</p>
+                    <div class="waitstart">
+                        <div class="inwaitstart">
+                            <span class="icon-circle waiticon"></span>
+                            <!-- <span class="icon-process activeIcon"></span> -->
+                            <span class="inwaitprove">通过</span>
+                        </div>
+                        <div class="inwaitstart">
+                            <span class="icon-circle waiticon" id="due"></span>
+                            <!-- <span class="icon-question activeIcon"></span> -->
+                            <span class="inwaitprove">转审</span>
+                        </div>
+                        <div class="inwaitstart">
+                            <span class="icon-circle waiticon"></span>
+                            <!-- <span class="icon-cancel-circle activeIcon"></span> -->
+                            <span class="inwaitprove">驳回</span>
+                        </div>
+                    </div>
+                    <textarea id="oText" class="weui-textarea duereason" placeholder="请输入转审理由" rows="3" maxlength="100" style="font-size: 12px;"></textarea>
+                    
+                    <button id="selectbutton">选择转审人</button>
+                    <button id="duebutton">提交</button>
+                </div>
+                <div id="div2">
+                    <div class="div2header">
+                        <span id="navtop">选择审批人</span>
+                        <span id="btn">确定</span>
+                    </div>
+                    <div id="div2content"></div>
                 </div>
             </div>
             <div class="hezi">
@@ -66,7 +94,7 @@
                 <div class="outone"></div>
             </div>
             <div class="hezi" style="display:block;">
-                <div class="mymessage">
+                <!-- <div class="mymessage">
                     <img src="images/tou.png" alt="" class="toux">
                     <div class="my">
                         <p class="myname">张小明 &nbsp;&nbsp;&nbsp;2017/05/09 20:00:00</p>
@@ -75,16 +103,12 @@
                     <div class="myprocess"><img src="images/ing.png" alt="" class="iconing">
                         <p class="ing">审核中</p>
                     </div>
+                </div> -->
+                <div class="myleave myleave-hook">
+                
                 </div>
-                <div class="myleave">
-                    <h5>事假</h5>
-                    <p class="mydays">请假时长：2天</p>
-                    <p class="mytimes">开始时间：2017/05/09 20:38:20</p>
-                    <p class="mytimes">结束时间：2017/05/09 20:38:20</p>
-                    <p class="myreason">请假理由：家中有事急需处理，请假两天，望批准</p>
-                </div>
-                <div class="mystep">
-                    <div class="stepone">
+                <div class="mystep mystep-hook">
+                    <!-- <div class="stepone">
                         <img src="images/1.png" alt="" class="toux">
                         <div class="his">
                             <p class="hiswork">第一级主管</p>
@@ -131,7 +155,7 @@
                                 <p class="hisadvice">拒绝理由：明天开会，调整请假时间</p>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -143,26 +167,9 @@
             <li><a href="mine.html"><span class="icon-grin"></span><div class="conduct">我的</div></a></li>
         </ul>
     </div>
-    <script>
-    window.onload = function() {
-        var select = document.getElementById('select');
-        var nav = select.getElementsByTagName('a')
-        var contruction = document.getElementById('contruction');
-        var ohezi = contruction.getElementsByClassName('hezi');
-
-        for (var i = 0; i < nav.length; i++) {
-            nav[i].index = i;
-            nav[i].onclick = function() {
-                for (var s = 0; s < nav.length; s++) {
-                    nav[s].className = "";
-                    ohezi[s].style.display = 'none';
-                }
-                this.className = 'active';
-                ohezi[this.index].style.display = "block";
-            };
-        }
-    }
-    </script>
+    
 </body>
-
+<script src="js/jquery-2.1.4.js"></script>
+<script src="js/mock-min.js"></script>
+<script src="js/message.js"></script>
 </html>

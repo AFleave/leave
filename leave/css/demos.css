@@ -32,9 +32,9 @@ body, html {
 #contect{
   width: 100%;
   height: 100%;
-  margin-top: 2.3rem; 
+  padding-top: 45px;
   min-height: 490px;
-  padding-bottom: 50px;
+  padding-bottom: 100px;
   background-color: #f6f6f6;
 }
 .mintitle{
@@ -65,26 +65,33 @@ body, html {
 .weui-cells .change{
   color: #27AE60;
 }
-.weui-cells .proname{
-  width: 30px;
-  height: 30px;
-  border:1px solid #e6e6e6;
-  border-radius: 50%;
-  padding: 4px;
-  margin:5px 0 -8px 5px;
-}
 .weui-cells .prove{
   width: 88px;
-  height: 80px;
-  text-align: center;
+  height: 90px;
   float: left;
+  margin-left: 10px;
+}
+.weui-cells .proname{
+  width: 35px;
+    height: 35px;
+    background-image: url(../images/number1.png);
+    background-position: center;
+    background-size: 35px 35px;
+    background-repeat: no-repeat;
+    border: 1px solid #e6e6e6;
+    border-radius: 50%;
+    margin: 9px 0 4px 13px;
+    font-size: 14px;
+    padding: 4px;
+    text-align: center;
+    line-height: 35px;
 }
 .weui-cells .prowork{
   padding: 2px 4px;
   background-color: #288DF0;
   color: #fff;
   font-size: 12px;
-  border:1px #288DF0 solid;
+  border:none;
   border-radius: 3px;
   margin-bottom: 5px;
 }
@@ -103,6 +110,12 @@ body, html {
   color: #fff;
   font-size: 16px;
   line-height: 2.3rem;
+  position: relative;
+}
+#btn{
+  position: absolute;
+  top: 1px;
+  right:23px;
 }
 .div2header .icon-return{
   font-size: 40px;
@@ -110,10 +123,8 @@ body, html {
   line-height: 2.3rem;
 }
 #navtop{
-  margin-left: 40px;
   text-align: center;  
-  line-height: 2.3rem;
-  margin-right: 40px;
+  display: block;
 }
 #div2{
   width: 100%;
@@ -155,9 +166,11 @@ body, html {
   background-color: #f6f6f6;
 }
 #div2content .department{
-  height: 30px;
-  display: block;
-  padding-left: 7px;
+      height: 37px;
+    display: block;
+    padding-left: 7px;
+    color: #27AE60;
+    line-height: 37px;
 }
 #div2content .list{
   width: 100%;
@@ -165,12 +178,78 @@ body, html {
 }
 #div2content .div2result{
   width: 100%;
-  height: 30px;
+  height: 40px;
+  line-height: 40px;
   border-bottom: 1px solid #f6f6f6;
-/*  border-width: 0 0 1px 0;
-  border-color: #f6f6f6;*/
+  font-size: 14px;
   padding-left: 12px;
   background-color: #fff;
+}
+#div2content .div2result .icon-radio-unchecked,
+#div2content .div2result .icon-radio-checked{
+  float: right;
+  margin-right:50px;
+  line-height: 40px;
+  font-size: 16px;
+}
+.icon-radio-unchecked{
+  color: #ccc;
+}
+.icon-radio-checked{
+  color: #27AE60;
+}
+#typeLeave{
+  width: 100%;
+  height: 80%;
+  background-color: #fff;
+  position: fixed;
+  top:100%;
+  left: 0;
+  z-index: 99;
+  transition: all 0.3s;
+}
+.typeheader{
+  position: relative;
+  width: 100%;
+  height: 2.3rem;
+  background-color: #f6f6f6;
+  font-size: 16px;
+  line-height: 2.3rem;
+}
+.typetitle{
+  display: block;
+  text-align: center;
+}
+.typeright{
+  position: absolute;
+  right: 12px;
+  bottom: 0px;
+  color:#27AE60;
+}
+.intype{
+  border-bottom: 1px solid #f6f6f6;
+  height: 40px;
+  line-height: 40px;
+}
+.type {
+    margin-left: 20px; 
+}
+.intype .icon-radio-unchecked,
+.intype .icon-radio-checked{
+  float: right;
+  margin-right:50px;
+  line-height: 40px;
+  font-size: 16px;
+}
+.icon-radio-unchecked{
+  color: #ccc;
+}
+.icon-radio-checked{
+  color: #27AE60;
+}
+.iconcheck{
+  font-size: 18px;
+  color: #27AE60;
 }
 .weui-footer{
     padding-top: 5px;
