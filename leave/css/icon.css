@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?kvf1gm');
-  src:  url('fonts/icomoon.eot?kvf1gm#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?kvf1gm') format('truetype'),
-    url('fonts/icomoon.woff?kvf1gm') format('woff'),
-    url('fonts/icomoon.svg?kvf1gm#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?pt8agf');
+  src:  url('fonts/icomoon.eot?pt8agf#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?pt8agf') format('truetype'),
+    url('fonts/icomoon.woff?pt8agf') format('woff'),
+    url('fonts/icomoon.svg?pt8agf#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,6 +24,28 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-return:before {
+  content: "\e901";
+  color: #fff;
+}
+.icon-home:before {
+  content: "\e900";
+}
+.icon-headphones:before {
+  content: "\e910";
+}
+.icon-profile:before {
+  content: "\e923";
+}
+.icon-user:before {
+  content: "\e971";
+}
+.icon-users:before {
+  content: "\e972";
+}
+.icon-cog:before {
+  content: "\e994";
+}
 .icon-wink:before {
   content: "\e9e7";
 }
@@ -33,9 +55,6 @@
 .icon-hipster:before {
   content: "\e9f9";
 }
-.icon-wondering:before {
-  content: "\e9fb";
-}
-.icon-sleepy:before {
-  content: "\e9fd";
+.icon-question:before {
+  content: "\ea09";
 }
