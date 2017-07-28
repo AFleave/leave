@@ -9,13 +9,81 @@
   font-size: 16px;
   text-align: center;
   line-height: 2.3rem;
+}
+#contect{
+  margin-top: 45px;
+  min-height:490px;
+  padding-bottom: 50px;
+}
+#contect .mymessage{
+  width: 100%;
+  height: 130px;
+  background-color: #f6f6f6;
+  text-align: center;
+}
+#contect .mymessage .toux{
+  border-radius:50%;
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+}
+#contect .mymessage p{
+  text-align: center;
+}
+#contect .othermessage{
+  width: 100%;
+  height: 60px;
+  display: flex;
+  text-align: center;
+}
+#contect .othermessage .tag1,
+#contect .othermessage .tag2,
+#contect .othermessage .tag3{
+  margin: 10px 0;
+  flex: 1;
+}
+#contect .othermessage .tag1,
+#contect .othermessage .tag2{
+  border-right: 1px solid #ccc;
 
 }
+#contect .othermessage .name{
+  font-size: 14px;
+}
+#contect .othermessage .tag{
+  color: #f00;
+  font-size: 13px;
+}
+#contect .line{
+  width: 100%;
+  height: 10px;
+  background-color: #f6f6f6;
+}
+.weui-cells{
+  margin-top: 0px;
+  font-size: 14px;
+}
+.weui-cell{
+  padding: 14px 15px;
+}
+.weui-cell__bd{
+  padding-left: 10px;
+}
+.weui-cell__bd span{
+  color: #f00;
+}
+.weui-btn_primary {
+    background-color: #f00;
+    margin: 30px 7% 0 7%;
+    height: 40px;
+    font-size: 16px;
+    line-height: 40px;
+}
 .weui-footer{
-    background-color: #ececec;
+  background-color: #ececec;
 }
 .weui-footer_fixed-bottom {
-    bottom: 0;
+  bottom: 0;
 }
 .weui-footer ul {
   font-size: 12px;

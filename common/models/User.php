@@ -7,6 +7,9 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+// 速率限制
+use yii\filters\RateLimitInterface;
+
 /**
  * User model
  *
@@ -21,10 +24,29 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface,RateLimitInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+    //速率限制 实现 RateLimitInterface 的 3 方法
+    public function getRateLimit($request, $action)
+    {
+        return [ 100 , 1];
+        // return [1 , 1];
+        // return [$this->rateLimit, 1]; // $rateLimit requests per second
+    }
+    public function loadAllowance($request, $action)
+    {
+        return [$this->allowance, $this->allowance_updated_at];
+    }
+    public function saveAllowance($request, $action, $allowance, $timestamp)
+    {
+        $this->allowance = $allowance;
+        $this->allowance_updated_at = $timestamp;
+        $this->save();
+    }   
+
+
 
 
     /**
