@@ -5,7 +5,7 @@ window.onload = function() {
     oText.oninput = function() {
             unf.innerHTML = oText.value.length
         }
-        //选择审批人
+//选择审批人
     var proname = document.getElementsByClassName('proname')[0];
     var div2 = document.getElementById('div2');
     var btn = document.getElementById('btn');
@@ -15,7 +15,7 @@ window.onload = function() {
     btn.onclick = function() {
             div2.style.top = "100%";
         }
-        //选择假别
+//选择假别
     var job = document.getElementById('job');
     var typeLeave = document.getElementById('typeLeave');
     var typeright = document.getElementById('typeright')
@@ -26,9 +26,9 @@ window.onload = function() {
         typeLeave.style.top = '100%';
     }
 
-    var time_date =document.getElementById('time_date');
+    var time_date = document.getElementById('time_date');
     var days = document.getElementById('days');
-    time_date.onclick=function(){
+    time_date.onclick = function() {
         days.addClass('icon-check_circle');
     }
 
@@ -39,74 +39,53 @@ $(function() {
     FastClick.attach(document.body);
 });
 
-//
+//审批人数据模拟
 var data = Mock.mock('/api/user', {
-    // 'tells|4-6': [{
-    //     'department': '设计部',
-    //     'userList|6-10': [{
-    //         'user_id|+1': 1,
-    //         'user_name': '@cname',
-    //         'depart_name': '设计部',
-    //         'job_name': '职位'
-    //     }]
-    // }]
-    // {
-    "data": [
-        {
-            "id": 5,
-            "name": "运营部",
-            "description": null,
-            "peopleNum": 1,
-            "people": [
-                {
-                    "position_id": 5,
-                    "position_name": "打杂",
-                    "user_id": 5,
-                    "username": "小王"
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "name": "设计部",
-            "description": "啦啦啦啦",
-            "peopleNum": 2,
-            "people": [
-                {
-                    "position_id": 5,
-                    "position_name": "老大",
-                    "user_id": 5,
-                    "username": "小王"
-                },
-                {
-                    "position_id": 4,
-                    "position_name": "主管",
-                    "user_id": 4,
-                    "username": "胡杰"
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "name": "程序部",
-            "description": null,
-            "peopleNum": 1,
-            "people": [
-                {
-                    "position_id": 5,
-                    "position_name": "小弟",
-                    "user_id": 5,
-                    "username": "小王"
-                }
-            ]
-        }
-    ],
+    "data": [{
+        "id": 5,
+        "name": "运营部",
+        "description": null,
+        "peopleNum": 1,
+        "people": [{
+            "position_id": 5,
+            "position_name": "打杂",
+            "user_id": 5,
+            "username": "小王"
+        }]
+    }, {
+        "id": 1,
+        "name": "设计部",
+        "description": "啦啦啦啦",
+        "peopleNum": 2,
+        "people": [{
+            "position_id": 5,
+            "position_name": "老大",
+            "user_id": 5,
+            "username": "小王"
+        }, {
+            "position_id": 4,
+            "position_name": "主管",
+            "user_id": 4,
+            "username": "胡杰"
+        }]
+    }, {
+        "id": 2,
+        "name": "程序部",
+        "description": null,
+        "peopleNum": 1,
+        "people": [{
+            "position_id": 5,
+            "position_name": "小弟",
+            "user_id": 5,
+            "username": "小王"
+        }]
+    }],
     "code": 200,
     "isSuccessful": true,
     "message": null,
     "error": null
 });
-//
+//假别选择数据模拟
 
 var dataLeave = Mock.mock('/api/dataLeave', {
     "data": [{
@@ -145,7 +124,7 @@ var dataLeave = Mock.mock('/api/dataLeave', {
 });
 
 // get审批人数据
-$(function(){
+$(function() {
     $.get("/api/user", {}, function(data) {
         var tells = $.parseJSON(data).data;
         var html = '';
@@ -176,11 +155,11 @@ $(function(){
 
             });
         })
-    }); 
+    });
 });
 
-// 
-$(function(){
+// get假别数据
+$(function() {
     $.get("/api/dataLeave", {}, function(data) {
         var data = $.parseJSON(data).data;
         var html = '';
@@ -205,11 +184,13 @@ $(function(){
     });
 });
 
-$(function(){
-    $('#sendData').click(function(){
+
+//表单验证
+$(function() {
+    $('#sendData').click(function() {
         $.ajax({
-            url:'http://localhost:8080/index.html',
-            data:{
+            url: 'http://localhost:8080/index.html',
+            data: {
                 "job": $('#job').val(),
                 "start": $('#datetime-picker-start').val(),
                 "end": $('#datetime-picker-end').val(),
@@ -217,55 +198,50 @@ $(function(){
                 "oText": $('#oText').val(),
                 "name": $('#proname-name').text()
             },
-            type:'POST',
-            beforeSend: function(){
-                if(!$('#job').val()){
+            type: 'POST',
+            beforeSend: function() {
+                if (!$('#job').val()) {
                     alert('job必选');
                     return false;
                 }
-                if(!$('#datetime-picker-start').val()){
+                if (!$('#datetime-picker-start').val()) {
                     alert('start必选');
                     return false;
                 }
-                if(!$('#datetime-picker-end').val()){
+                if (!$('#datetime-picker-end').val()) {
                     alert('end必选');
                     return false;
                 }
-                if(!$('#time_date').val()){
+                if (!$('#time_date').val()) {
                     alert('date必填');
                     return false;
                 }
-                if(!$('#oText').val()){
+                if (!$('#oText').val()) {
                     alert('oText必填');
                     return false;
                 }
-                if(!$('#proname-name').text()){
+                if (!$('#proname-name').text()) {
                     alert('name必选');
                     return false;
                 }
                 //$('#sendData').attr('disabled').text('发送中...');
             },
-            success: function(data){
+            success: function(data) {
                 alert('发送成功');
                 window.location.href = './message.html';
-                
+
             },
-            error: function(){
+            error: function() {
 
             }
         });
     });
-    
+
 });
 
-// var stine; 
-// (unction getTime (n){
-//    stine = n
-//     console.log(stine)
-// };
-
-var dateTimeModal = (function () {
-    var initDate = function (startDateTimeId, endDateTimeId, dateTimeId) {
+//时间计算
+var dateTimeModal = (function() {
+    var initDate = function(startDateTimeId, endDateTimeId, dateTimeId) {
         var startDate;
         var startTime;
         var endDate;
@@ -275,28 +251,28 @@ var dateTimeModal = (function () {
             title: '出发时间',
             min: "1990-12-12",
             max: "2022-12-12 12:12",
-            onChange: function (picker, values, displayValues) {
+            onChange: function(picker, values, displayValues) {
                 // 显示的时间格式
-                startTime = values[0]+'-'+values[1]+'-'+values[2]+' '+values[3]+':'+values[4]; 
+                startTime = values[0] + '-' + values[1] + '-' + values[2] + ' ' + values[3] + ':' + values[4];
                 // 转换成可相减的时间格式 
                 startDate = new Date(startTime);
                 $('#datestart').addClass('icon-check_circle');
             },
-            onClose: function(){
+            onClose: function() {
                 if (startDate > endDate) {
                     $(startDateTimeId).val(endTime);
                     //dayTime = 0 ;
                 }
-                var timer = (endDate-startDate)/1000/60/60;
-                if(isNaN(timer) || timer<0){
+                var timer = (endDate - startDate) / 1000 / 60 / 60;
+                if (isNaN(timer) || timer < 0) {
                     dayTime = 0
-                }else{
+                } else {
                     dayTime = timer
                 }
                 $(dateTimeId).val(dayTime);
-                if(dayTime > 0){
+                if (dayTime > 0) {
                     $('#days').addClass('icon-check_circle');
-                }else{
+                } else {
                     $('#days').removeClass('icon-check_circle');
                 }
             }
@@ -305,28 +281,28 @@ var dateTimeModal = (function () {
             title: '出发时间',
             min: "1990-12-12",
             max: "2022-12-12 12:12",
-            onChange: function (picker, values, displayValues) {
-                endTime = values[0]+'-'+values[1]+'-'+values[2]+' '+values[3]+':'+values[4];
+            onChange: function(picker, values, displayValues) {
+                endTime = values[0] + '-' + values[1] + '-' + values[2] + ' ' + values[3] + ':' + values[4];
                 endDate = new Date(endTime);
                 $('#dateend').addClass('icon-check_circle');
-                
+
             },
-            onClose: function(){
+            onClose: function() {
                 if (startDate > endDate) {
                     $(endDateTimeId).val(startTime);
                     //dayTime = 0 ;
                 }
-                var timer = (endDate-startDate)/1000/60/60;
+                var timer = (endDate - startDate) / 1000 / 60 / 60;
 
-                if(isNaN(timer) || timer < 0){
+                if (isNaN(timer) || timer < 0) {
                     dayTime = 0
-                }else{
+                } else {
                     dayTime = timer
                 }
                 $(dateTimeId).val(dayTime);
-                if(dayTime > 0){
+                if (dayTime > 0) {
                     $('#days').addClass('icon-check_circle');
-                }else{
+                } else {
                     $('#days').removeClass('icon-check_circle');
                 }
             }
@@ -337,44 +313,5 @@ var dateTimeModal = (function () {
     };
 })();
 
-dateTimeModal.initDate("#datetime-picker-start","#datetime-picker-end","#time_date");
+dateTimeModal.initDate("#datetime-picker-start", "#datetime-picker-end", "#time_date");
 
-
-// $("#datetime-picker-start").datetimePicker({
-//     title: '出发时间',
-//     min: "1990-12-12",
-//     max: "2022-12-12 12:12",
-//     onChange: function(picker, values, displayValues) {
-    
-//          //$('#datestart').addClass('icon-check_circle');
-//     }
-// });
-// $("#datetime-picker-end").datetimePicker({
-//     onChange: function(picker, values, displayValues) {
-//          //$('#dateend').addClass('icon-check_circle');
-//     }
-// });
-
-
-
-// $("#datetime-picker-start").click(function(){
-//     return $("#datetime-picker-start").val()
-// });
-
-// $("#datetime-picker-end").click(function(){
-//     return $("#datetime-picker-end").val()
-// });
-
-// $("#job").select({
-//     title: "选择假别",
-//     items: sds,
-//     onChange: function(d) {
-//         console.log(this, d);
-//     },
-//     onClose: function() {
-//         console.log("close");
-//     },
-//     onOpen: function() {
-//         console.log("open");
-//     },
-// });
